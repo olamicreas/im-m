@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Image Generator</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Add your styles here */
+    body {
+      background-color: rgb(0, 0, 0);
+      color: #ffffff;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .audio-recording-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .start-recording-button {
+      font-size: 70px;
+      color: #435f7a;
+      cursor: pointer;
+      opacity: 0.5;
+      margin-bottom: 30px;
+    }
+    .start-recording-button:hover {
+      opacity: 1;
+    }
+    .recording-control-buttons-container {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      width: 334px;
+      margin-bottom: 30px;
+    }
+    .recording-elapsed-time {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .red-recording-dot {
+      font-size: 30px;
+      color: red;
+      margin-right: 12px;
+      animation: flashing-recording-dot 2s infinite;
+    }
+    @keyframes flashing-recording-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <div class="audio-recording-container">
+      <p>Click to record</p>
+      <i class="start-recording-button fa fa-microphone" aria-hidden="true" onclick="irec();"></i>
+      <div class="recording-control-buttons-container hide">
+        <i class="cancel-recording-button fa fa-times-circle-o" aria-hidden="true"></i>
+        <div class="recording-elapsed-time">
+          <i class="red-recording-dot fa fa-circle" aria-hidden="true"></i>
+          <p class="elapsed-time"></p>
+        </div>
+        <i class="pause-recording-button fa fa-pause-circle-o" aria-hidden="true"></i>
+        <i class="resume-recording-button fa fa-microphone" aria-hidden="true"></i>
+        <i class="stop-recording-button fa fa-stop-circle-o" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div id="displayImage"></div>
+  </div>
+  <div id="loadingSpinner" style="display: none;"><i class="fas fa-spinner fa-spin"></i></div>
+  <script>
+    function irec() {
+      document.getElementById('loadingSpinner').style.display = 'block';
+      const url = "{% url 'image' %}";
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('displayImage').innerHTML = `<img src="${data.image_url}" alt="Generated Image" />`;
+          document.getElementById('loadingSpinner').style.display = 'none';
+        })
+        .catch(error => {
+          document.getElementById('loadingSpinner').style.display = 'none';
+          console.error('Error:', error)});
+    }
+  </script>
+</body>
+</html>
