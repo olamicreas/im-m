@@ -2,12 +2,12 @@ databases:
   - name: imageGendb
     plan: free
     databaseName: imageGen
-    user: mysite
+    user: imageGen
 
 services:
   - type: web
     plan: free
-    name: mysite
+    name: imageGen
     runtime: python
     buildCommand: "./build.sh"
     startCommand: "python -m gunicorn mysite.asgi:application -k uvicorn.workers.UvicornWorker"
