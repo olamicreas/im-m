@@ -1,19 +1,19 @@
 databases:
-  - name: imagedb
+  - name: imageGendb
     plan: free
-    databaseName: image
-    user: image
+    databaseName: imageGen
+    user: mysite
 
 services:
   - type: web
     plan: free
-    name: image
+    name: mysite
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "python -m gunicorn imageGen.asgi:application -k uvicorn.workers.UvicornWorker"
-      - key: postgresql://image:1mdZkNZgqGBAahRCcxlHnsuncPmnHOnW@dpg-cr29ftbv2p9s738c22h0-a/imagedb_3kvs
+    startCommand: "python -m gunicorn mysite.asgi:application -k uvicorn.workers.UvicornWorker"    envVars:
+      - key: DATABASE_URL
         fromDatabase:
-          name: imagedb
+          name: imageGendb
           property: connectionString
       - key: SECRET_KEY
         generateValue: true
